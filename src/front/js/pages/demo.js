@@ -4,38 +4,36 @@ import { Link } from "react-router-dom";
 import { Context } from "../store/appContext";
 
 export const Demo = () => {
-	const { store, actions } = useContext(Context);
+  const { store, actions } = useContext(Context);
+  useEffect(() => {
+    actions.getUserInfo();
+  }, []);
+  return (
+    <>
+      <br />
+      <br />
+      <div className="container col-6 d-flex justify-content-center">
+        <div
+          className="card text-dark bg-light mb-3 text-center"
+          style={{ maxWidth: "18rem" }}
+        >
+          <img
+            src="https://us.123rf.com/450wm/tuktukdesign/tuktukdesign1606/tuktukdesign160600119/59070200-icono-de-usuario-hombre-perfil-hombre-de-negocios-avatar-icono-persona-en-la-ilustraci%C3%B3n-vectorial.jpg"
+            className="card-img-top"
+            alt="profile"
+          />
+          <div className="card-body">
+            <h5 className="card-title">User email adress:</h5>
+            <p className="card-text">{store.userInfo}</p>
+          </div>
+        </div>
+      </div>
 
-	return (
-		<div className="container">
-			<ul className="list-group">
-				{store.demo.map((item, index) => {
-					return (
-						<li
-							key={index}
-							className="list-group-item d-flex justify-content-between"
-							style={{ background: item.background }}>
-							<Link to={"/single/" + index}>
-								<span>Link to: {item.title}</span>
-							</Link>
-							{// Conditional render example
-							// Check to see if the background is orange, if so, display the message
-							item.background === "orange" ? (
-								<p style={{ color: item.initial }}>
-									Check store/flux.js scroll to the actions to see the code
-								</p>
-							) : null}
-							<button className="btn btn-success" onClick={() => actions.changeColor(index, "orange")}>
-								Change Color
-							</button>
-						</li>
-					);
-				})}
-			</ul>
-			<br />
-			<Link to="/">
-				<button className="btn btn-primary">Back home</button>
-			</Link>
-		</div>
-	);
+      <div className="container col-6 d-flex justify-content-center">
+        <Link to="/">
+          <button className="btn btn-primary">Back home</button>
+        </Link>
+      </div>
+    </>
+  );
 };
