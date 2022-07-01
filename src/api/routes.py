@@ -54,4 +54,6 @@ def create_user():
     response_body={
         "msg": "usuario creado"
     }
-    return jsonify(response_body), 200
+    # return jsonify(response_body), 200
+    access_token = create_access_token(identity=body["email"])
+    return jsonify(access_token=access_token)   

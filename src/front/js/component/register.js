@@ -5,11 +5,14 @@ import { Navigate } from "react-router-dom";
 const Register = () => {
   const [newemail, setNewemail] = useState("");
   const [newpassword, setNewpassword] = useState("");
+  const [newpassword2, setNewpassword2] = useState("");
   const { store, actions } = useContext(Context);
 
   const handleRegister = (e) => {
     e.preventDefault();
-    actions.register(newemail, newpassword);
+    newpassword === newpassword2
+      ? actions.register(newemail, newpassword)
+      : alert("Las contraseñas no coinciden");
   };
   //   condicion ? true : false
   return (
@@ -48,7 +51,7 @@ const Register = () => {
               type="password"
               className="form-control"
               id="exampleInputPassword2"
-              //   onChange={(e) => setNewPassword2(e.target.value)}
+              onChange={(e) => setNewpassword2(e.target.value)}
             />
           </div>
           <button type="submit" className="btn btn-warning">
