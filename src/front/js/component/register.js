@@ -14,6 +14,14 @@ const Register = () => {
       ? actions.register(newemail, newpassword)
       : alert("Las contraseñas no coinciden");
   };
+
+  const gotoprofile = () => {
+    {
+      console.log(store.auth);
+      store.auth ? <Navigate to="/profile" /> : "";
+    }
+  };
+
   //   condicion ? true : false
   return (
     <>
@@ -54,7 +62,11 @@ const Register = () => {
               onChange={(e) => setNewpassword2(e.target.value)}
             />
           </div>
-          <button type="submit" className="btn btn-warning">
+          <button
+            type="submit"
+            className="btn btn-warning"
+            onClick={() => gotoprofile()}
+          >
             Completar registro
           </button>
         </form>

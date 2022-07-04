@@ -19,6 +19,5 @@ export const Footer = () => (
     <br />
     <br />
     <br />
-    <span>Me debes una cerveza miguel</span>
   </footer>
 );

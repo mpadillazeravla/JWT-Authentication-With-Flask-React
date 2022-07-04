@@ -26,12 +26,22 @@ def login():
     password = request.json.get("password", None)
     user = User.query.filter_by(email=email).first()
 
+    # esto esta puesto para que compruebe si los datos no son correctos
+    # si no ponia este if, el fetch fallaba ya que USER no estaba creado
+    # entonces estaba comparando el mail con el mail de user (que no existe)
+    if not user :
+        return jsonify({"msg": "datos incorrectos"}), 401
+
     if email != user.email or password != user.password:
-        return jsonify({"msg": "Bad username or password"}), 401 
+        return jsonify({"msg": "datos incorrectos"}), 401 
+
+    # if user and user.password != password:
+    #     return jsonify ("datos incorrectos"), 401    
     
     access_token = create_access_token(identity=email)
     return jsonify(access_token=access_token)   
-
+    
+        
 
 #ruta protegida
 @api.route("/profile", methods=["GET"])
@@ -47,6 +57,9 @@ def protected():
 def create_user():
     body = json.loads(request.data)
     print(body)
+    if User.query.filter_by(email=body["email"]).first():
+        return jsonify({"msg": "Usuario duplicado"}), 401 
+
     user = User(email=body["email"], password=body["password"], is_active=True)
     db.session.add(user)
     db.session.commit()
@@ -56,4 +69,4 @@ def create_user():
     }
     # return jsonify(response_body), 200
     access_token = create_access_token(identity=body["email"])
-    return jsonify(access_token=access_token)   
+    return jsonify(access_token=access_token), 200   

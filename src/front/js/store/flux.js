@@ -43,13 +43,18 @@ const getState = ({
                             setStore({
                                 auth: true
                             })
+                            alert("Cargando Perfil")
+                        } else if (response.status === 401) {
+                            alert("datos incorrectos")
                         }
                         return response.json()
+
                     })
                     .then((data) => {
                         localStorage.setItem("token", data.access_token)
                     })
             },
+
 
             register: (newemail, newpassword) => {
                 fetch(process.env.BACKEND_URL + '/api/user', {
@@ -63,7 +68,14 @@ const getState = ({
                         }
                     })
                     .then((response) => {
-                        if (response.status === 200) {}
+                        if (response.status === 200) {
+                            setStore({
+                                auth: true
+                            })
+                            alert("Usuario creado, vaya a pagina principal para acceder")
+                        } else if (response.status === 401) {
+                            alert("usuario duplicado")
+                        }
                         return response.json()
                     })
 
@@ -77,8 +89,9 @@ const getState = ({
                 })
             },
 
-
-            getUserInfo: () => {
+            // al principio la llame GETUSERINFO junto con la funcion de DEMO, pero la tengo llamada en ROUTES de la api
+            //  como protected y la he puesto asi para ser coherente con el resto de fetchs y sus endpoints
+            protected: () => {
                 fetch(process.env.BACKEND_URL + '/api/profile', {
                         method: "GET",
                         headers: {

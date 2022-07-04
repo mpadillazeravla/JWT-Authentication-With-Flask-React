@@ -17,7 +17,12 @@ export const Single = (props) => {
         <br />
         <br />
         <Link to="/">
-          <span className="btn btn-primary btn-lg" href="#" role="button">
+          <span
+            className="btn btn-primary btn-lg"
+            href="#"
+            role="button"
+            onClick={() => actions.logout()}
+          >
             Back home
           </span>
         </Link>
