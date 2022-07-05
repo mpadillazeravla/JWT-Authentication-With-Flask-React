@@ -6,6 +6,12 @@ from api.models import db, User
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token, get_jwt_identity, jwt_required
 import json
+import bcrypt
+from bcrypt import hashpw
+
+# IMPORTANTE: AL INSTALAR PAQUETE DE HASH, HAY QUE INSTALAR PY-BCRYPT , NO COMO DICE LA DOCU
+# ES DECIR, SERIA PIPENV install PY-bcrypt , en lugar de pipenv install bcrypt
+
 
 api = Blueprint('api', __name__)
 
@@ -32,9 +38,11 @@ def login():
     if not user :
         return jsonify({"msg": "datos incorrectos"}), 401
 
-    if email != user.email or password != user.password:
-        return jsonify({"msg": "datos incorrectos"}), 401 
 
+    # if email != user.email or password != user.password:
+    if email != user.email or not bcrypt.checkpw(password, user.password):
+        return jsonify({"msg": "datos incorrectos"}), 401 
+    
     # if user and user.password != password:
     #     return jsonify ("datos incorrectos"), 401    
     
@@ -45,7 +53,7 @@ def login():
 
 #ruta protegida
 @api.route("/profile", methods=["GET"])
-@jwt_required()
+@jwt_required() 
 def protected():
         current_user = get_jwt_identity()
         user = User.query.filter_by(email=current_user).first()
@@ -60,7 +68,11 @@ def create_user():
     if User.query.filter_by(email=body["email"]).first():
         return jsonify({"msg": "Usuario duplicado"}), 401 
 
-    user = User(email=body["email"], password=body["password"], is_active=True)
+    hashed = bcrypt.hashpw(body["password"], bcrypt.gensalt())
+    user = User(email=body["email"], password=hashed, is_active=True)
+    
+
+    # user = User(email=body["email"], password=body["password"], is_active=True)
     db.session.add(user)
     db.session.commit()
 
