@@ -72,11 +72,17 @@ const getState = ({
                             setStore({
                                 auth: true
                             })
-                            alert("Usuario creado, vaya a pagina principal para acceder")
+                            // alert("Usuario creado, vaya a pagina principal para acceder")
                         } else if (response.status === 401) {
-                            alert("usuario duplicado")
+                            alert("Usuario duplicado")
+                        } else if (response.status === 404) {
+                            alert("Los campos no pueden estar vacíos")
                         }
+
                         return response.json()
+                    })
+                    .then((data) => {
+                        localStorage.setItem("token", data.access_token)
                     })
 
             },

@@ -68,6 +68,9 @@ def create_user():
     if User.query.filter_by(email=body["email"]).first():
         return jsonify({"msg": "Usuario duplicado"}), 401 
 
+    if not body["email"] or not body["password"]:
+        return jsonify({"msg": "Datos incorrectos"}), 404 
+
     hashed = bcrypt.hashpw(body["password"], bcrypt.gensalt())
     user = User(email=body["email"], password=hashed, is_active=True)
     
